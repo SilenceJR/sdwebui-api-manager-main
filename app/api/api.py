@@ -1,0 +1,179 @@
+import json
+import requests
+
+from app.db.models import ResponseModel
+
+
+def img2img(payload):
+    url = 'http://127.0.0.1:7860/sdapi/v1/img2img'
+
+    headers = {
+        'Content-Type': 'application/json',
+    }
+
+    filter_data = {}
+
+    for k, v in payload.items():
+        if payload[k] != None:
+            filter_data[k] = v
+
+    print("img2img settings", filter_data)
+
+    response = requests.post(url, headers=headers,
+                             data=json.dumps(filter_data))
+
+    res = response.json()
+
+    return res
+
+
+def txt2img(payload):
+    url = 'http://127.0.0.1:7860/sdapi/v1/txt2img'
+
+    headers = {
+        'Content-Type': 'application/json',
+    }
+
+    filter_data = {}
+
+    for k, v in payload.items():
+        if payload[k] != None:
+            filter_data[k] = v
+
+    print("txt2img settings", filter_data)
+    res = ResponseModel()
+
+    try:
+        response = requests.post(url, headers=headers,
+                                 data=json.dumps(filter_data))
+        res.code = 200
+        res.msg = None
+        res.data = response.json()
+    except Exception as e:
+        print(e)
+        res.code = 201
+        res.msg = '網絡服務異常'
+    return res
+
+
+def progress():
+    url = 'http://127.0.0.1:7860/sdapi/v1/progress?skip_current_image=false'
+
+    headers = {
+        'Content-Type': 'application/json',
+    }
+
+    res = ResponseModel()
+
+    try:
+        response = requests.get(url, headers=headers)
+        res.code = 200
+        res.msg = None
+        res.data = response.json()
+    except Exception as e:
+        print(e)
+        res.code = 201
+        res.msg = '網絡服務異常'
+    return res
+
+
+def get_options():
+    url = 'http://127.0.0.1:7860/sdapi/v1/options'
+
+    headers = {
+        'Content-Type': 'application/json',
+    }
+
+    response = requests.get(url, headers=headers, timeout=5)
+
+    res = response.json()
+
+    return res
+
+
+def set_options(payload):
+    url = 'http://127.0.0.1:7860/sdapi/v1/options'
+
+    headers = {
+        'Content-Type': 'application/json',
+    }
+
+    filter_data = {}
+
+    for k, v in payload.items():
+        if payload[k] != None:
+            filter_data[k] = v
+
+    print("set_options settings", filter_data)
+
+    response = requests.post(url, headers=headers,
+                             data=json.dumps(filter_data))
+
+    res = response.json()
+
+    return res
+
+
+def extra_single_image(payload):
+    url = 'http://127.0.0.1:7860/sdapi/v1/extra-single-image'
+
+    headers = {
+        'Content-Type': 'application/json',
+    }
+
+    filter_data = {}
+
+    for k, v in payload.items():
+        if payload[k] != None:
+            filter_data[k] = v
+
+    print("set_options settings", filter_data)
+
+    response = requests.post(url, headers=headers,
+                             data=json.dumps(filter_data))
+
+    res = response.json()
+
+    return res
+
+
+def controlnet_model_list():
+    url = 'http://127.0.0.1:7860/controlnet/model_list'
+
+    headers = {
+        'Content-Type': 'application/json',
+    }
+
+    response = requests.get(url, headers=headers)
+
+    res = response.json()
+
+    return res
+
+
+def controlnet_module_list():
+    url = 'http://127.0.0.1:7860/controlnet/module_list'
+
+    headers = {
+        'Content-Type': 'application/json',
+    }
+
+    response = requests.get(url, headers=headers)
+
+    res = response.json()
+
+    return res
+
+
+def sd_models():
+    url = 'http://127.0.0.1:7860/sdapi/v1/sd-models'
+
+    headers = {
+        'Content-Type': 'application/json',
+    }
+
+    response = requests.get(url, headers=headers)
+
+    res = response.json()
+
+    return res
